@@ -1,0 +1,13 @@
+[package]
+name = "xenon-codegen"
+version = "0.1.0"
+edition = "2024"
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[dependencies]
+enum-as-inner = "0.6.1"
+
+[dev-dependencies]
+galvanic-test = "0.2.0"
