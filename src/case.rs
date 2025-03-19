@@ -1,12 +1,12 @@
-use crate::{expression::Expression, statement::Statement};
+use crate::{expression::Expression, scope::Scope};
 
 #[derive(Debug, Clone, Default)]
 pub struct Case {
     pub condition: Expression,
-    pub body: Statement,
+    pub body: Scope,
 }
 impl Case {
-    pub fn new(condition: Expression, body: Statement) -> Case {
+    pub fn new(condition: Expression, body: Scope) -> Case {
         return Case {
             condition: condition,
             body: body,
@@ -18,10 +18,10 @@ impl Case {
     }
 }
 impl std::fmt::Display for Case {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match write!(
             fmt,
-            "case {}:\n{}",
+            "case {} {}",
             self.condition.to_string(),
             self.body.to_string()
         ) {
