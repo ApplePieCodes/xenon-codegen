@@ -13,7 +13,7 @@ impl Case {
         };
     }
 
-    pub fn is_valid(&mut self) -> bool {
+    pub fn is_valid(&self) -> bool {
         return self.condition.is_valid() && self.body.is_valid();
     }
 }

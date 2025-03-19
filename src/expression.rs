@@ -18,7 +18,7 @@ pub enum Expression {
     Null,
 }
 impl Expression {
-    pub fn is_valid(&mut self) -> bool {
+    pub fn is_valid(&self) -> bool {
         if self.is_integer_literal() {
             return self.as_integer_literal().unwrap().is_valid();
         } else if self.is_float_literal() {
@@ -43,37 +43,37 @@ impl Expression {
 impl fmt::Display for Expression {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         if self.is_integer_literal() {
-            match write!(fmt, "{}", self.into_integer_literal().unwrap().to_string()) {
+            match write!(fmt, "{}", self.as_integer_literal().unwrap().to_string()) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             }
         } else if self.is_float_literal() {
-            match write!(fmt, "{}", self.into_float_literal().unwrap().to_string()) {
+            match write!(fmt, "{}", self.as_float_literal().unwrap().to_string()) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             }
         } else if self.is_string_literal() {
-            match write!(fmt, "{}", self.into_string_literal().unwrap().to_string()) {
+            match write!(fmt, "{}", self.as_string_literal().unwrap().to_string()) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             }
         } else if self.is_boolean_literal() {
-            match write!(fmt, "{}", self.into_boolean_literal().unwrap().to_string()) {
+            match write!(fmt, "{}", self.as_boolean_literal().unwrap().to_string()) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             }
         } else if self.is_unary_operation() {
-            match write!(fmt, "{}", self.into_unary_operation().unwrap().to_string()) {
+            match write!(fmt, "{}", self.as_unary_operation().unwrap().to_string()) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             }
         } else if self.is_binary_operation() {
-            match write!(fmt, "{}", self.into_binary_operation().unwrap().to_string()) {
+            match write!(fmt, "{}", self.as_binary_operation().unwrap().to_string()) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             }
         } else if self.is_identifier() {
-            match write!(fmt, "{}", self.into_identifier().unwrap().to_string()) {
+            match write!(fmt, "{}", self.as_identifier().unwrap().to_string()) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             }
@@ -88,12 +88,10 @@ pub struct IntegerLiteral {
 }
 impl IntegerLiteral {
     pub fn new(val: i64) -> IntegerLiteral {
-        return IntegerLiteral {
-            value: val
-        };
+        return IntegerLiteral { value: val };
     }
 
-    pub fn is_valid(self) -> bool {
+    pub fn is_valid(&self) -> bool {
         return true;
     }
 }
@@ -101,7 +99,7 @@ impl fmt::Display for IntegerLiteral {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match write!(fmt, "{}", self.value) {
             Ok(_) => (),
-            Err(e) => return Err(e)
+            Err(e) => return Err(e),
         }
         return Ok(());
     }
@@ -113,12 +111,10 @@ pub struct FloatLiteral {
 }
 impl FloatLiteral {
     pub fn new(val: f64) -> FloatLiteral {
-        return FloatLiteral {
-            value: val
-        };
+        return FloatLiteral { value: val };
     }
 
-    pub fn is_valid(&mut self) -> bool {
+    pub fn is_valid(&self) -> bool {
         return self.value.is_normal() || self.value == 0.0;
     }
 }
@@ -126,7 +122,7 @@ impl fmt::Display for FloatLiteral {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match write!(fmt, "{}", self.value) {
             Ok(_) => (),
-            Err(e) => return Err(e)
+            Err(e) => return Err(e),
         }
         return Ok(());
     }
@@ -138,11 +134,9 @@ pub struct StringLiteral {
 }
 impl StringLiteral {
     pub fn new(val: String) -> StringLiteral {
-        return StringLiteral {
-            value: val
-        };
+        return StringLiteral { value: val };
     }
-    pub fn is_valid(&mut self) -> bool {
+    pub fn is_valid(&self) -> bool {
         return true;
     }
 }
@@ -150,7 +144,7 @@ impl fmt::Display for StringLiteral {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match write!(fmt, "\"{}\"", self.value) {
             Ok(_) => (),
-            Err(e) => return Err(e)
+            Err(e) => return Err(e),
         }
         return Ok(());
     }
@@ -162,12 +156,10 @@ pub struct BooleanLiteral {
 }
 impl BooleanLiteral {
     pub fn new(val: bool) -> BooleanLiteral {
-        return BooleanLiteral {
-            value: val
-        };
+        return BooleanLiteral { value: val };
     }
 
-    pub fn is_valid(&mut self) -> bool {
+    pub fn is_valid(&self) -> bool {
         return true;
     }
 }
@@ -175,7 +167,7 @@ impl fmt::Display for BooleanLiteral {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match write!(fmt, "{}", self.value) {
             Ok(_) => (),
-            Err(e) => return Err(e)
+            Err(e) => return Err(e),
         }
         return Ok(());
     }
@@ -190,11 +182,11 @@ impl UnaryOperation {
     pub fn new(op: String, val: Expression) -> UnaryOperation {
         return UnaryOperation {
             operator: op,
-            term: Box::new(val)
+            term: Box::new(val),
         };
     }
 
-    pub fn is_valid(&mut self) -> bool {
+    pub fn is_valid(&self) -> bool {
         if !["+", "-", "*", "&"].contains(&self.operator.as_str()) {
             return false;
         }
@@ -205,7 +197,7 @@ impl fmt::Display for UnaryOperation {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match write!(fmt, "{}{}", self.operator, self.term) {
             Ok(_) => (),
-            Err(e) => return Err(e)
+            Err(e) => return Err(e),
         }
         return Ok(());
     }
@@ -213,16 +205,16 @@ impl fmt::Display for UnaryOperation {
 
 #[derive(Debug, Clone, Default)]
 pub struct Parentheses {
-    pub value: Box<Expression>
+    pub value: Box<Expression>,
 }
 impl Parentheses {
     pub fn new(expr: Expression) -> Parentheses {
         return Parentheses {
-            value: Box::new(expr)
+            value: Box::new(expr),
         };
     }
 
-    pub fn is_valid(&mut self) -> bool {
+    pub fn is_valid(&self) -> bool {
         return self.value.is_valid();
     }
 }
@@ -230,7 +222,7 @@ impl fmt::Display for Parentheses {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match write!(fmt, "({})", self.value) {
             Ok(_) => (),
-            Err(e) => return Err(e)
+            Err(e) => return Err(e),
         }
         return Ok(());
     }
@@ -247,19 +239,22 @@ impl BinaryOperation {
         return BinaryOperation {
             left: Box::new(left),
             operator: op,
-            right: Box::new(right)
+            right: Box::new(right),
         };
     }
 
-    pub fn is_valid(&mut self) -> bool {
-        return self.left.is_valid() && self.right.is_valid() && ["+", "-", "*", "/", "==", "<", "<=", ">", ">=", "&&", "||"].contains(&self.operator.as_str());
+    pub fn is_valid(&self) -> bool {
+        return self.left.is_valid()
+            && self.right.is_valid()
+            && ["+", "-", "*", "/", "==", "<", "<=", ">", ">=", "&&", "||"]
+                .contains(&self.operator.as_str());
     }
 }
 impl fmt::Display for BinaryOperation {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match write!(fmt, "{} {} {}", self.left, self.operator, self.right) {
             Ok(_) => (),
-            Err(e) => return Err(e)
+            Err(e) => return Err(e),
         }
         return Ok(());
     }

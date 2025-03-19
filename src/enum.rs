@@ -1,30 +1,31 @@
-use std::fmt;
+use std::{fmt, string};
 
-use crate::{attribute::Attribute, r#type::Type, Visibility};
+use crate::{Visibility, attribute::Attribute, r#type::Type};
 
 #[derive(Debug, Clone, Default)]
 pub struct Enum {
     pub visibility: Visibility,
     pub attrs: Vec<Attribute>,
-    pub name: Type,
+    pub name: String,
     pub variants: Vec<Variant>,
 }
 impl Enum {
-    pub fn new(name: Type) -> Enum {
+    pub fn new(name: String) -> Enum {
         return Enum {
+            visibility: Visibility::Private,
             attrs: vec![],
             name: name,
-            variants: vec![]
+            variants: vec![],
         };
     }
 
-    pub fn is_valid(&mut self) -> bool {
+    pub fn is_valid(&self) -> bool {
         for i in 0..self.attrs.len() {
             if !self.attrs[i].is_valid() {
                 return false;
             }
         }
-        if !self.name.is_valid() {
+        if self.name.is_empty() {
             return false;
         }
         for i in 0..self.variants.len() {
@@ -40,22 +41,22 @@ impl fmt::Display for Enum {
         for i in 0..self.attrs.len() {
             match writeln!(fmt, "{}", self.attrs[i]) {
                 Ok(_) => (),
-                Err(e) => return Err(e)
+                Err(e) => return Err(e),
             }
         }
         match write!(fmt, "{} enum {} {{", self.visibility, self.name) {
             Ok(_) => (),
-            Err(e) => return Err(e)
+            Err(e) => return Err(e),
         }
         for i in 0..self.variants.len() {
             match writeln!(fmt, "{}", self.variants[i]) {
                 Ok(_) => (),
-                Err(e) => return Err(e)
+                Err(e) => return Err(e),
             }
         }
         match write!(fmt, "}}") {
             Ok(_) => (),
-            Err(e) => return Err(e)
+            Err(e) => return Err(e),
         }
         return Ok(());
     }
@@ -70,11 +71,11 @@ impl Variant {
     pub fn new(name: String) -> Variant {
         return Variant {
             attrs: vec![],
-            name: name
+            name: name,
         };
     }
 
-    pub fn is_valid(&mut self) -> bool {
+    pub fn is_valid(&self) -> bool {
         for i in 0..self.attrs.len() {
             if !self.attrs[i].is_valid() {
                 return false;
@@ -88,12 +89,12 @@ impl fmt::Display for Variant {
         for i in 0..self.attrs.len() {
             match writeln!(fmt, "{}", self.attrs[i]) {
                 Ok(_) => (),
-                Err(e) => return Err(e)
+                Err(e) => return Err(e),
             }
         }
         match writeln!(fmt, "{},", self.name) {
             Ok(_) => (),
-            Err(e) => return Err(e)
+            Err(e) => return Err(e),
         }
         return Ok(());
     }
