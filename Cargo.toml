@@ -1,7 +1,13 @@
 [package]
 name = "xenon-codegen"
 version = "0.1.0"
+authors = ["Liam Greenway <liamgr33nway@gmail.com>"]
 edition = "2024"
+description = "Codegen and AST for the Xenon programming language"
+repository = "https://github.com/ApplePieCodes/xenon-codegen"
+license = "MPL-2.0"
+keywords = ["codegen", "library", "language", "programming", "xenon"]
+categories = ["development-tools", "parsing"]
 
 [lints.rust]
 unsafe_code = "forbid"

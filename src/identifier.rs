@@ -15,7 +15,7 @@ pub enum IdentifierAccess {
 impl IdentifierAccess {
     pub fn is_valid(&self) -> bool {
         if self.is_access() {
-            return self.as_access().unwrap().is_valid();
+            self.as_access().unwrap().is_valid()
         } else if self.is_deref_access() {
             return self.as_deref_access().unwrap().is_valid();
         } else if self.is_function_call() {
@@ -43,7 +43,7 @@ impl fmt::Display for IdentifierAccess {
                 Err(e) => return Err(e),
             }
         }
-        return Ok(());
+        Ok(())
     }
 }
 
@@ -54,10 +54,7 @@ pub struct Access {
 }
 impl Access {
     pub fn new(name: String) -> Access {
-        return Access {
-            name: name,
-            child: None,
-        };
+        Access { name, child: None }
     }
 
     pub fn is_valid(&self) -> bool {
@@ -67,7 +64,7 @@ impl Access {
         if self.child.is_some() {
             return self.child.clone().unwrap().is_valid();
         }
-        return true;
+        true
     }
 }
 impl fmt::Display for Access {
@@ -76,29 +73,26 @@ impl fmt::Display for Access {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        match self.child.clone() {
-            Some(c) => {
-                if c.is_access() {
-                    match write!(fmt, ".{}", c.as_access().unwrap()) {
-                        Ok(_) => (),
-                        Err(e) => return Err(e),
-                    }
-                } else if c.is_deref_access() {
-                    match write!(fmt, "->{}", c.as_deref_access().unwrap()) {
-                        Ok(_) => (),
-                        Err(e) => return Err(e),
-                    }
-                } else if c.is_function_call() {
-                    match write!(fmt, ".{}", c.as_function_call().unwrap()) {
-                        Ok(_) => (),
-                        Err(e) => return Err(e),
-                    }
+        if let Some(c) = self.child.clone() {
+            if c.is_access() {
+                match write!(fmt, ".{}", c.as_access().unwrap()) {
+                    Ok(_) => (),
+                    Err(e) => return Err(e),
+                }
+            } else if c.is_deref_access() {
+                match write!(fmt, "->{}", c.as_deref_access().unwrap()) {
+                    Ok(_) => (),
+                    Err(e) => return Err(e),
+                }
+            } else if c.is_function_call() {
+                match write!(fmt, ".{}", c.as_function_call().unwrap()) {
+                    Ok(_) => (),
+                    Err(e) => return Err(e),
                 }
             }
-            None => (),
         }
 
-        return Ok(());
+        Ok(())
     }
 }
 
@@ -110,11 +104,11 @@ pub struct FunctionCall {
 }
 impl FunctionCall {
     pub fn new(name: String, arguments: Vec<Expression>) -> FunctionCall {
-        return FunctionCall {
-            name: name,
-            arguments: arguments,
+        FunctionCall {
+            name,
+            arguments,
             child: None,
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
@@ -127,10 +121,8 @@ impl FunctionCall {
             }
         }
         match self.child.clone() {
-            Some(c) => {
-                return c.is_valid();
-            }
-            None => return true,
+            Some(c) => c.is_valid(),
+            None => true,
         }
     }
 }
@@ -140,7 +132,7 @@ impl fmt::Display for FunctionCall {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        if self.arguments.len() >= 1 {
+        if !self.arguments.is_empty() {
             match write!(fmt, "{}", self.arguments[0]) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
@@ -156,27 +148,24 @@ impl fmt::Display for FunctionCall {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        match self.child.clone() {
-            Some(c) => {
-                if c.is_access() {
-                    match write!(fmt, ".{}", c.as_access().unwrap()) {
-                        Ok(_) => (),
-                        Err(e) => return Err(e),
-                    }
-                } else if c.is_deref_access() {
-                    match write!(fmt, "->{}", c.as_deref_access().unwrap()) {
-                        Ok(_) => (),
-                        Err(e) => return Err(e),
-                    }
-                } else if c.is_function_call() {
-                    match write!(fmt, ".{}", c.as_function_call().unwrap()) {
-                        Ok(_) => (),
-                        Err(e) => return Err(e),
-                    }
+        if let Some(c) = self.child.clone() {
+            if c.is_access() {
+                match write!(fmt, ".{}", c.as_access().unwrap()) {
+                    Ok(_) => (),
+                    Err(e) => return Err(e),
+                }
+            } else if c.is_deref_access() {
+                match write!(fmt, "->{}", c.as_deref_access().unwrap()) {
+                    Ok(_) => (),
+                    Err(e) => return Err(e),
+                }
+            } else if c.is_function_call() {
+                match write!(fmt, ".{}", c.as_function_call().unwrap()) {
+                    Ok(_) => (),
+                    Err(e) => return Err(e),
                 }
             }
-            None => (),
         }
-        return Ok(());
+        Ok(())
     }
 }

@@ -10,11 +10,11 @@ pub struct VariableAssignment {
 }
 impl VariableAssignment {
     pub fn new(name: IdentifierAccess, op: String, value: Expression) -> VariableAssignment {
-        return VariableAssignment {
-            name: name,
+        VariableAssignment {
+            name,
             operator: op,
-            value: value,
-        };
+            value,
+        }
     }
 
     pub fn is_valid(&self) -> bool {
@@ -27,7 +27,7 @@ impl VariableAssignment {
         if !self.value.is_valid() {
             return false;
         }
-        return true;
+        true
     }
 }
 impl fmt::Display for VariableAssignment {
@@ -36,6 +36,6 @@ impl fmt::Display for VariableAssignment {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }

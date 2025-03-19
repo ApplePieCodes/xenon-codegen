@@ -23,7 +23,7 @@ pub enum ModuleItem {
 impl ModuleItem {
     pub fn is_valid(&self) -> bool {
         if self.is_module() {
-            return self.as_module().unwrap().is_valid();
+            self.as_module().unwrap().is_valid()
         } else if self.is_struct() {
             return self.as_struct().unwrap().is_valid();
         } else if self.is_function() {
@@ -84,7 +84,7 @@ impl fmt::Display for ModuleItem {
                 Err(e) => return Err(e),
             }
         }
-        return Ok(());
+        Ok(())
     }
 }
 
@@ -100,12 +100,12 @@ pub struct Module {
 }
 impl Module {
     pub fn new(name: String) -> Module {
-        return Module {
+        Module {
             attrs: vec![],
             visibility: Visibility::Private,
-            name: name,
+            name,
             items: vec![],
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
@@ -122,7 +122,7 @@ impl Module {
                 return false;
             }
         }
-        return true;
+        true
     }
 }
 impl fmt::Display for Module {
@@ -147,6 +147,6 @@ impl fmt::Display for Module {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }

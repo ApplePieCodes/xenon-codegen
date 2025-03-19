@@ -43,7 +43,7 @@ impl fmt::Display for Visibility {
                 Err(e) => return Err(e),
             }
         }
-        return Ok(());
+        Ok(())
     }
 }
 

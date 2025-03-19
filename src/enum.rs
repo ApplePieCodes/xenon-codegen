@@ -1,6 +1,6 @@
-use std::{fmt, string};
+use std::fmt;
 
-use crate::{Visibility, attribute::Attribute, r#type::Type};
+use crate::{Visibility, attribute::Attribute};
 
 #[derive(Debug, Clone, Default)]
 pub struct Enum {
@@ -11,12 +11,12 @@ pub struct Enum {
 }
 impl Enum {
     pub fn new(name: String) -> Enum {
-        return Enum {
+        Enum {
             visibility: Visibility::Private,
             attrs: vec![],
-            name: name,
+            name,
             variants: vec![],
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
@@ -33,7 +33,7 @@ impl Enum {
                 return false;
             }
         }
-        return true;
+        true
     }
 }
 impl fmt::Display for Enum {
@@ -58,7 +58,7 @@ impl fmt::Display for Enum {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }
 
@@ -69,10 +69,10 @@ pub struct Variant {
 }
 impl Variant {
     pub fn new(name: String) -> Variant {
-        return Variant {
+        Variant {
             attrs: vec![],
-            name: name,
-        };
+            name,
+        }
     }
 
     pub fn is_valid(&self) -> bool {
@@ -81,7 +81,7 @@ impl Variant {
                 return false;
             }
         }
-        return true;
+        true
     }
 }
 impl fmt::Display for Variant {
@@ -96,6 +96,6 @@ impl fmt::Display for Variant {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }

@@ -14,13 +14,13 @@ pub struct Struct {
 }
 impl Struct {
     pub fn new(name: Type) -> Struct {
-        return Struct {
+        Struct {
             attrs: vec![],
             visibility: Visibility::Private,
-            name: name,
+            name,
             base: None,
             properties: vec![],
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
@@ -32,13 +32,10 @@ impl Struct {
         if !self.name.is_valid() {
             return false;
         }
-        match self.base.clone() {
-            Some(b) => {
-                if !b.is_valid() {
-                    return false;
-                }
+        if let Some(b) = self.base.clone() {
+            if !b.is_valid() {
+                return false;
             }
-            None => (),
         }
         for i in 0..self.properties.len() {
             if !self.properties[i].is_valid() {
@@ -46,7 +43,7 @@ impl Struct {
             }
         }
 
-        return true;
+        true
     }
 }
 impl fmt::Display for Struct {
@@ -58,17 +55,17 @@ impl fmt::Display for Struct {
             }
         }
         match self.base.clone() {
-            Some(b) => match write!(fmt, "{} struct {} : {} {{\n", self.visibility, self.name, b) {
+            Some(b) => match writeln!(fmt, "{} struct {} : {} {{", self.visibility, self.name, b) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             },
-            None => match write!(fmt, "{} struct {} {{\n", self.visibility, self.name) {
+            None => match writeln!(fmt, "{} struct {} {{", self.visibility, self.name) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             },
         }
         for i in 0..self.properties.len() {
-            match write!(fmt, "{};\n", self.properties[i]) {
+            match writeln!(fmt, "{};", self.properties[i]) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             }
@@ -78,6 +75,6 @@ impl fmt::Display for Struct {
             Err(e) => return Err(e),
         }
 
-        return Ok(());
+        Ok(())
     }
 }

@@ -9,10 +9,10 @@ pub struct WhileStatement {
 }
 impl WhileStatement {
     pub fn new(condition: Expression, body: Statement) -> WhileStatement {
-        return WhileStatement {
-            condition: condition,
+        WhileStatement {
+            condition,
             body: Box::new(body),
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
@@ -22,7 +22,7 @@ impl WhileStatement {
         if !self.body.is_valid() {
             return false;
         }
-        return true;
+        true
     }
 }
 impl fmt::Display for WhileStatement {
@@ -31,6 +31,6 @@ impl fmt::Display for WhileStatement {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }

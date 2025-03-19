@@ -28,7 +28,7 @@ pub enum Statement {
 impl Statement {
     pub fn is_valid(&self) -> bool {
         if self.is_scope() {
-            return self.as_scope().unwrap().is_valid();
+            self.as_scope().unwrap().is_valid()
         } else if self.is_variable_definition() {
             return self.as_variable_assignment().unwrap().is_valid();
         } else if self.is_variable_assignment() {
@@ -47,10 +47,8 @@ impl Statement {
             return self.as_unsafe().unwrap().is_valid();
         } else if self.is_break_statement() {
             return true;
-        } else if self.is_continue_statement() {
-            return true;
         } else {
-            return false;
+            return self.is_continue_statement();
         }
     }
 }
@@ -112,6 +110,6 @@ impl fmt::Display for Statement {
                 Err(e) => return Err(e),
             }
         }
-        return Ok(());
+        Ok(())
     }
 }

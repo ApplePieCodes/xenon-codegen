@@ -10,26 +10,23 @@ pub struct Type {
 }
 impl Type {
     pub fn new(name: IdentifierAccess, typetype: TypeType) -> Type {
-        return Type {
-            name: name,
-            typetype: typetype,
+        Type {
+            name,
+            typetype,
             generic_child: None,
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
         if !self.name.is_valid() {
             return false;
         }
-        match self.generic_child.clone() {
-            Some(g) => {
-                if !g.is_valid() {
-                    return false;
-                }
+        if let Some(g) = self.generic_child.clone() {
+            if !g.is_valid() {
+                return false;
             }
-            None => (),
         }
-        return true;
+        true
     }
 }
 impl fmt::Display for Type {
@@ -44,15 +41,14 @@ impl fmt::Display for Type {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        match self.generic_child.clone() {
-            Some(g) => match write!(fmt, "<{}>", g) {
+        if let Some(g) = self.generic_child.clone() {
+            match write!(fmt, "<{}>", g) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
-            },
-            None => (),
+            }
         }
 
-        return Ok(());
+        Ok(())
     }
 }
 

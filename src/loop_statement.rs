@@ -8,16 +8,16 @@ pub struct LoopStatement {
 }
 impl LoopStatement {
     pub fn new(body: Statement) -> LoopStatement {
-        return LoopStatement {
+        LoopStatement {
             body: Box::new(body),
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
         if !self.body.is_valid() {
             return false;
         }
-        return true;
+        true
     }
 }
 impl fmt::Display for LoopStatement {
@@ -26,6 +26,6 @@ impl fmt::Display for LoopStatement {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }

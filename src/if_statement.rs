@@ -10,11 +10,11 @@ pub struct IfStatement {
 }
 impl IfStatement {
     pub fn new(condition: Expression, body: Statement) -> IfStatement {
-        return IfStatement {
-            condition: condition,
+        IfStatement {
+            condition,
             body: Box::new(body),
             else_body: None,
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
@@ -24,15 +24,12 @@ impl IfStatement {
         if !self.body.is_valid() {
             return false;
         }
-        match self.else_body.clone() {
-            Some(b) => {
-                if !b.is_valid() {
-                    return false;
-                }
+        if let Some(b) = self.else_body.clone() {
+            if !b.is_valid() {
+                return false;
             }
-            None => (),
         }
-        return true;
+        true
     }
 }
 impl fmt::Display for IfStatement {
@@ -41,13 +38,12 @@ impl fmt::Display for IfStatement {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        match self.else_body.clone() {
-            Some(eb) => match write!(fmt, "\nelse {}", eb) {
+        if let Some(eb) = self.else_body.clone() {
+            match write!(fmt, "\nelse {}", eb) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
-            },
-            None => (),
+            }
         }
-        return Ok(());
+        Ok(())
     }
 }

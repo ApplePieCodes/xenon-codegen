@@ -11,36 +11,30 @@ pub struct VariableDefinition {
 }
 impl VariableDefinition {
     pub fn new(name: String) -> VariableDefinition {
-        return VariableDefinition {
+        VariableDefinition {
             visibility: Visibility::Private,
-            name: name,
+            name,
             ty: None,
             value: None,
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
         if self.name.is_empty() {
             return false;
         }
-        match self.ty.clone() {
-            Some(t) => {
-                if !t.is_valid() {
-                    return false;
-                }
+        if let Some(t) = self.ty.clone() {
+            if !t.is_valid() {
+                return false;
             }
-            None => (),
         }
-        match self.value.clone() {
-            Some(v) => {
-                if !v.is_valid() {
-                    return false;
-                }
+        if let Some(v) = self.value.clone() {
+            if !v.is_valid() {
+                return false;
             }
-            None => (),
         }
 
-        return true;
+        true
     }
 }
 impl fmt::Display for VariableDefinition {
@@ -49,21 +43,19 @@ impl fmt::Display for VariableDefinition {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        match self.ty.clone() {
-            Some(t) => match write!(fmt, ": {}", t) {
+        if let Some(t) = self.ty.clone() {
+            match write!(fmt, ": {}", t) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
-            },
-            None => (),
+            }
         }
-        match self.value.clone() {
-            Some(v) => match write!(fmt, " = {}", v) {
+        if let Some(v) = self.value.clone() {
+            match write!(fmt, " = {}", v) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
-            },
-            None => (),
+            }
         }
 
-        return Ok(());
+        Ok(())
     }
 }

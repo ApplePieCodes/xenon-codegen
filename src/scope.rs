@@ -9,7 +9,7 @@ pub struct Scope {
 }
 impl Scope {
     pub fn new() -> Scope {
-        return Scope { items: vec![] };
+        Scope { items: vec![] }
     }
 
     pub fn is_valid(&self) -> bool {
@@ -19,12 +19,12 @@ impl Scope {
             }
         }
 
-        return true;
+        true
     }
 }
 impl fmt::Display for Scope {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match write!(fmt, "{{\n") {
+        match writeln!(fmt, "{{") {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
@@ -39,6 +39,6 @@ impl fmt::Display for Scope {
             Err(e) => return Err(e),
         }
 
-        return Ok(());
+        Ok(())
     }
 }

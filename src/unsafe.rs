@@ -8,13 +8,13 @@ pub struct Unsafe {
 }
 impl Unsafe {
     pub fn new(body: Statement) -> Unsafe {
-        return Unsafe {
+        Unsafe {
             body: Box::new(body),
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
-        return self.body.is_valid();
+        self.body.is_valid()
     }
 }
 impl fmt::Display for Unsafe {
@@ -23,6 +23,6 @@ impl fmt::Display for Unsafe {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }

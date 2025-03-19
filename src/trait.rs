@@ -16,13 +16,13 @@ pub struct Trait {
 }
 impl Trait {
     pub fn new(name: Type) -> Trait {
-        return Trait {
+        Trait {
             attrs: vec![],
             visibility: Visibility::Private,
-            name: name,
+            name,
             fields: vec![],
             methods: vec![],
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
@@ -44,7 +44,7 @@ impl Trait {
                 return false;
             }
         }
-        return true;
+        true
     }
 }
 impl fmt::Display for Trait {
@@ -55,7 +55,7 @@ impl fmt::Display for Trait {
                 Err(e) => return Err(e),
             }
         }
-        match write!(fmt, "{} trait {} {{\n", self.visibility, self.name) {
+        match writeln!(fmt, "{} trait {} {{", self.visibility, self.name) {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
@@ -75,6 +75,6 @@ impl fmt::Display for Trait {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }

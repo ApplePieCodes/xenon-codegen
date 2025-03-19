@@ -12,12 +12,12 @@ pub struct Impl {
 }
 impl Impl {
     pub fn new(target: Type) -> Impl {
-        return Impl {
+        Impl {
             attrs: vec![],
-            target: target,
+            target,
             r#trait: None,
             methods: vec![],
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
@@ -29,15 +29,12 @@ impl Impl {
         if !self.target.is_valid() {
             return false;
         }
-        match self.r#trait.clone() {
-            Some(t) => {
-                if !t.is_valid() {
-                    return false;
-                }
+        if let Some(t) = self.r#trait.clone() {
+            if !t.is_valid() {
+                return false;
             }
-            None => (),
         }
-        return true;
+        true
     }
 }
 impl fmt::Display for Impl {
@@ -49,17 +46,17 @@ impl fmt::Display for Impl {
             }
         }
         match self.r#trait.clone() {
-            Some(t) => match write!(fmt, "impliment {} for {} {{\n", t, self.target) {
+            Some(t) => match writeln!(fmt, "impliment {} for {} {{", t, self.target) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             },
-            None => match write!(fmt, "impliment {} {{\n", self.target) {
+            None => match writeln!(fmt, "impliment {} {{", self.target) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             },
         }
         for i in 0..self.methods.len() {
-            match write!(fmt, "{}\n", self.methods[i]) {
+            match writeln!(fmt, "{}", self.methods[i]) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             }
@@ -68,6 +65,6 @@ impl fmt::Display for Impl {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }

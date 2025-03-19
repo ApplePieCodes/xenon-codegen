@@ -20,7 +20,7 @@ pub enum Expression {
 impl Expression {
     pub fn is_valid(&self) -> bool {
         if self.is_integer_literal() {
-            return self.as_integer_literal().unwrap().is_valid();
+            self.as_integer_literal().unwrap().is_valid()
         } else if self.is_float_literal() {
             return self.as_float_literal().unwrap().is_valid();
         } else if self.is_string_literal() {
@@ -43,42 +43,42 @@ impl Expression {
 impl fmt::Display for Expression {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         if self.is_integer_literal() {
-            match write!(fmt, "{}", self.as_integer_literal().unwrap().to_string()) {
+            match write!(fmt, "{}", self.as_integer_literal().unwrap()) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             }
         } else if self.is_float_literal() {
-            match write!(fmt, "{}", self.as_float_literal().unwrap().to_string()) {
+            match write!(fmt, "{}", self.as_float_literal().unwrap()) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             }
         } else if self.is_string_literal() {
-            match write!(fmt, "{}", self.as_string_literal().unwrap().to_string()) {
+            match write!(fmt, "{}", self.as_string_literal().unwrap()) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             }
         } else if self.is_boolean_literal() {
-            match write!(fmt, "{}", self.as_boolean_literal().unwrap().to_string()) {
+            match write!(fmt, "{}", self.as_boolean_literal().unwrap()) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             }
         } else if self.is_unary_operation() {
-            match write!(fmt, "{}", self.as_unary_operation().unwrap().to_string()) {
+            match write!(fmt, "{}", self.as_unary_operation().unwrap()) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             }
         } else if self.is_binary_operation() {
-            match write!(fmt, "{}", self.as_binary_operation().unwrap().to_string()) {
+            match write!(fmt, "{}", self.as_binary_operation().unwrap()) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             }
         } else if self.is_identifier() {
-            match write!(fmt, "{}", self.as_identifier().unwrap().to_string()) {
+            match write!(fmt, "{}", self.as_identifier().unwrap()) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
             }
         }
-        return Ok(());
+        Ok(())
     }
 }
 
@@ -88,11 +88,11 @@ pub struct IntegerLiteral {
 }
 impl IntegerLiteral {
     pub fn new(val: i64) -> IntegerLiteral {
-        return IntegerLiteral { value: val };
+        IntegerLiteral { value: val }
     }
 
     pub fn is_valid(&self) -> bool {
-        return true;
+        true
     }
 }
 impl fmt::Display for IntegerLiteral {
@@ -101,7 +101,7 @@ impl fmt::Display for IntegerLiteral {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }
 
@@ -111,11 +111,11 @@ pub struct FloatLiteral {
 }
 impl FloatLiteral {
     pub fn new(val: f64) -> FloatLiteral {
-        return FloatLiteral { value: val };
+        FloatLiteral { value: val }
     }
 
     pub fn is_valid(&self) -> bool {
-        return self.value.is_normal() || self.value == 0.0;
+        self.value.is_normal() || self.value == 0.0
     }
 }
 impl fmt::Display for FloatLiteral {
@@ -124,7 +124,7 @@ impl fmt::Display for FloatLiteral {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }
 
@@ -134,10 +134,10 @@ pub struct StringLiteral {
 }
 impl StringLiteral {
     pub fn new(val: String) -> StringLiteral {
-        return StringLiteral { value: val };
+        StringLiteral { value: val }
     }
     pub fn is_valid(&self) -> bool {
-        return true;
+        true
     }
 }
 impl fmt::Display for StringLiteral {
@@ -146,7 +146,7 @@ impl fmt::Display for StringLiteral {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }
 
@@ -156,11 +156,11 @@ pub struct BooleanLiteral {
 }
 impl BooleanLiteral {
     pub fn new(val: bool) -> BooleanLiteral {
-        return BooleanLiteral { value: val };
+        BooleanLiteral { value: val }
     }
 
     pub fn is_valid(&self) -> bool {
-        return true;
+        true
     }
 }
 impl fmt::Display for BooleanLiteral {
@@ -169,7 +169,7 @@ impl fmt::Display for BooleanLiteral {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }
 
@@ -180,17 +180,17 @@ pub struct UnaryOperation {
 }
 impl UnaryOperation {
     pub fn new(op: String, val: Expression) -> UnaryOperation {
-        return UnaryOperation {
+        UnaryOperation {
             operator: op,
             term: Box::new(val),
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
         if !["+", "-", "*", "&"].contains(&self.operator.as_str()) {
             return false;
         }
-        return self.term.is_valid();
+        self.term.is_valid()
     }
 }
 impl fmt::Display for UnaryOperation {
@@ -199,7 +199,7 @@ impl fmt::Display for UnaryOperation {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }
 
@@ -209,13 +209,13 @@ pub struct Parentheses {
 }
 impl Parentheses {
     pub fn new(expr: Expression) -> Parentheses {
-        return Parentheses {
+        Parentheses {
             value: Box::new(expr),
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
-        return self.value.is_valid();
+        self.value.is_valid()
     }
 }
 impl fmt::Display for Parentheses {
@@ -224,7 +224,7 @@ impl fmt::Display for Parentheses {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }
 
@@ -236,18 +236,18 @@ pub struct BinaryOperation {
 }
 impl BinaryOperation {
     pub fn new(left: Expression, op: String, right: Expression) -> BinaryOperation {
-        return BinaryOperation {
+        BinaryOperation {
             left: Box::new(left),
             operator: op,
             right: Box::new(right),
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
-        return self.left.is_valid()
+        self.left.is_valid()
             && self.right.is_valid()
             && ["+", "-", "*", "/", "==", "<", "<=", ">", ">=", "&&", "||"]
-                .contains(&self.operator.as_str());
+                .contains(&self.operator.as_str())
     }
 }
 impl fmt::Display for BinaryOperation {
@@ -256,6 +256,6 @@ impl fmt::Display for BinaryOperation {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }

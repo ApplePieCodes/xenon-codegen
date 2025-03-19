@@ -7,28 +7,20 @@ pub struct Case {
 }
 impl Case {
     pub fn new(condition: Expression, body: Scope) -> Case {
-        return Case {
-            condition: condition,
-            body: body,
-        };
+        Case { condition, body }
     }
 
     pub fn is_valid(&self) -> bool {
-        return self.condition.is_valid() && self.body.is_valid();
+        self.condition.is_valid() && self.body.is_valid()
     }
 }
 impl std::fmt::Display for Case {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match write!(
-            fmt,
-            "case {} {}",
-            self.condition.to_string(),
-            self.body.to_string()
-        ) {
+        match write!(fmt, "case {} {}", self.condition, self.body) {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
 
-        return Ok(());
+        Ok(())
     }
 }

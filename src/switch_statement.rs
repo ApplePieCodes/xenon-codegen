@@ -9,10 +9,10 @@ pub struct SwitchStatement {
 }
 impl SwitchStatement {
     pub fn new(condition: Expression) -> SwitchStatement {
-        return SwitchStatement {
-            condition: condition,
+        SwitchStatement {
+            condition,
             cases: vec![],
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
@@ -25,12 +25,12 @@ impl SwitchStatement {
                 return false;
             }
         }
-        return true;
+        true
     }
 }
 impl fmt::Display for SwitchStatement {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match write!(fmt, "switch ({}) {{\n", self.condition) {
+        match writeln!(fmt, "switch ({}) {{", self.condition) {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
@@ -45,6 +45,6 @@ impl fmt::Display for SwitchStatement {
             Err(e) => return Err(e),
         }
 
-        return Ok(());
+        Ok(())
     }
 }

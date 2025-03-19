@@ -9,14 +9,14 @@ pub struct Attribute {
 }
 impl Attribute {
     pub fn new(name: &str) -> Attribute {
-        return Attribute {
+        Attribute {
             name: name.to_string(),
             value: None,
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
-        return self.name.is_empty();
+        self.name.is_empty()
     }
 }
 impl std::fmt::Display for Attribute {
@@ -31,10 +31,10 @@ impl std::fmt::Display for Attribute {
                 Err(e) => return Err(e),
             }
         }
-        match write!(fmt, "]\n") {
+        match writeln!(fmt, "]") {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }

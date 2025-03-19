@@ -6,17 +6,21 @@ use crate::expression::Expression;
 pub struct ReturnStatement {
     pub value: Option<Expression>,
 }
+impl Default for ReturnStatement {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ReturnStatement {
     pub fn new() -> ReturnStatement {
-        return ReturnStatement { value: None };
+        ReturnStatement { value: None }
     }
 
     pub fn is_valid(&self) -> bool {
         match self.value.clone() {
-            Some(v) => {
-                return v.clone().is_valid();
-            }
-            None => return true,
+            Some(v) => v.clone().is_valid(),
+            None => true,
         }
     }
 }
@@ -36,6 +40,6 @@ impl fmt::Display for ReturnStatement {
                 Err(e) => return Err(e),
             },
         }
-        return Ok(());
+        Ok(())
     }
 }

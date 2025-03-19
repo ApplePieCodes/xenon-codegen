@@ -14,15 +14,15 @@ pub struct Function {
 }
 impl Function {
     pub fn new(name: String, returns: Type, body: Statement) -> Function {
-        return Function {
+        Function {
             r#async: false,
             attrs: vec![],
             visibility: Visibility::Private,
-            name: name,
+            name,
             arguments: vec![],
-            returns: returns,
-            body: body,
-        };
+            returns,
+            body,
+        }
     }
 
     pub fn is_valid(&self) -> bool {
@@ -46,7 +46,7 @@ impl Function {
             return false;
         }
 
-        return true;
+        true
     }
 }
 
@@ -68,7 +68,7 @@ impl fmt::Display for Function {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        if self.arguments.len() >= 1 {
+        if !self.arguments.is_empty() {
             match write!(fmt, "{}", self.arguments[0]) {
                 Ok(_) => (),
                 Err(e) => return Err(e),
@@ -89,7 +89,7 @@ impl fmt::Display for Function {
             Err(e) => return Err(e),
         }
 
-        return Ok(());
+        Ok(())
     }
 }
 
@@ -100,14 +100,14 @@ pub struct Argument {
 }
 impl Argument {
     pub fn new(nm: String, ty: Type) -> Argument {
-        return Argument {
+        Argument {
             name: nm,
             r#type: ty,
-        };
+        }
     }
 
     pub fn is_valid(&self) -> bool {
-        return !self.name.is_empty() && self.r#type.is_valid();
+        !self.name.is_empty() && self.r#type.is_valid()
     }
 }
 impl fmt::Display for Argument {
@@ -116,6 +116,6 @@ impl fmt::Display for Argument {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        return Ok(());
+        Ok(())
     }
 }
