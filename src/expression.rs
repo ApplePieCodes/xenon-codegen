@@ -133,8 +133,8 @@ pub struct StringLiteral {
     pub value: String,
 }
 impl StringLiteral {
-    pub fn new(val: String) -> StringLiteral {
-        StringLiteral { value: val }
+    pub fn new(val: &str) -> StringLiteral {
+        StringLiteral { value: val.to_string() }
     }
     pub fn is_valid(&self) -> bool {
         true

@@ -49,15 +49,7 @@ impl fmt::Display for Visibility {
 
 #[cfg(test)]
 mod tests {
-    use core::panic;
-    use std::{thread::Scope, vec};
-
     use galvanic_test::test_suite;
-
-    use crate::{
-        Visibility, attribute::Attribute, expression::UnaryOperation, identifier::IdentifierAccess,
-        loop_statement::LoopStatement, module::Module, statement, r#type::Type,
-    };
 
     test_suite! {
         name attribute;
@@ -119,7 +111,7 @@ mod tests {
         }
 
         test string_literal_test() {
-            let string = StringLiteral::new("Hello World!".to_string());
+            let string = StringLiteral::new("Hello World!");
             assert!(string.to_string() == "\"Hello World!\"");
         }
 
@@ -149,13 +141,13 @@ mod tests {
         use crate::{Visibility, function::Function, r#type::{Type, TypeType}, identifier::{Access, IdentifierAccess}, statement::Statement, scope::Scope};
 
         test public_function() {
-            let mut func = Function::new("test".to_string(), Type::new(IdentifierAccess::Access(Access::new("void".to_string())), TypeType::Normal), Statement::Scope(Scope::new()));
+            let mut func = Function::new("test", Type::new(IdentifierAccess::Access(Access::new("void".to_string())), TypeType::Normal), Statement::Scope(Scope::new()));
             func.visibility = Visibility::Public;
             assert!(func.to_string() == "public fn test() -> void {\n}");
         }
 
         test private_function() {
-            let func = Function::new("test".to_string(), Type::new(IdentifierAccess::Access(Access::new("void".to_string())), TypeType::Normal), Statement::Scope(Scope::new()));
+            let func = Function::new("test", Type::new(IdentifierAccess::Access(Access::new("void".to_string())), TypeType::Normal), Statement::Scope(Scope::new()));
             assert!(func.to_string() == "private fn test() -> void {\n}");
         }
     }
@@ -200,7 +192,7 @@ mod tests {
 
     test_suite! {
         name r#impl;
-        use crate::{r#impl::Impl, r#type::{Type, TypeType}, identifier::{IdentifierAccess, Access}, r#trait::Trait};
+        use crate::{r#impl::Impl, r#type::{Type, TypeType}, identifier::{IdentifierAccess, Access}};
 
         test r#impl() {
             let imp = Impl::new(Type::new(IdentifierAccess::Access(Access::new("Test".to_string())), TypeType::Normal));
@@ -226,7 +218,7 @@ mod tests {
 
     test_suite! {
         name module;
-        use crate::{module::{Module, ModuleItem}, Visibility};
+        use crate::{module::{Module}, Visibility};
 
         test public_module() {
             let mut modu = Module::new("test".to_string());

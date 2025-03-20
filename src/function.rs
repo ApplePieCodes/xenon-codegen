@@ -13,12 +13,12 @@ pub struct Function {
     pub body: Statement,
 }
 impl Function {
-    pub fn new(name: String, returns: Type, body: Statement) -> Function {
+    pub fn new(name: &str, returns: Type, body: Statement) -> Function {
         Function {
             r#async: false,
             attrs: vec![],
             visibility: Visibility::Private,
-            name,
+            name: name.to_string(),
             arguments: vec![],
             returns,
             body,
@@ -99,9 +99,9 @@ pub struct Argument {
     pub r#type: Type,
 }
 impl Argument {
-    pub fn new(nm: String, ty: Type) -> Argument {
+    pub fn new(nm: &str, ty: Type) -> Argument {
         Argument {
-            name: nm,
+            name: nm.to_string(),
             r#type: ty,
         }
     }

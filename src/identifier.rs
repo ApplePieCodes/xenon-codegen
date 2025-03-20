@@ -24,6 +24,22 @@ impl IdentifierAccess {
             return false;
         }
     }
+
+    pub fn set_generic_child(&mut self, child: IdentifierAccess) {
+        if self.is_access() {
+            let mut temp = self.clone().into_access().unwrap();
+            temp.child = Some(Box::new(child));
+            *self = IdentifierAccess::Access(temp);
+        } else if self.is_deref_access() {
+            let mut temp = self.clone().into_deref_access().unwrap();
+            temp.child = Some(Box::new(child));
+            *self = IdentifierAccess::DerefAccess(temp);
+        } else if self.is_function_call() {
+            let mut temp = self.clone().into_function_call().unwrap();
+            temp.child = Some(Box::new(child));
+            *self = IdentifierAccess::FunctionCall(temp);
+        }
+    }
 }
 impl fmt::Display for IdentifierAccess {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
