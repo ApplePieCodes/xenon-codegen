@@ -1,152 +1,84 @@
-use core::fmt;
-
 use enum_as_inner::EnumAsInner;
 
-use crate::{
-    Visibility, attribute::Attribute, r#enum::Enum, function::Function, r#impl::Impl,
-    r#struct::Struct, r#trait::Trait, variable_definition::VariableDefinition,
-};
+use crate::identifier::Identifier;
 
-/// A module item
-#[derive(Debug, Clone, Default, EnumAsInner)]
-pub enum ModuleItem {
-    Module(Module),
-    Struct(Struct),
-    Function(Function),
-    VariableDefinition(VariableDefinition),
-    Trait(Trait),
-    Enum(Enum),
-    Impl(Impl),
-    #[default]
-    Null,
-}
-impl ModuleItem {
-    pub fn is_valid(&self) -> bool {
-        if self.is_module() {
-            self.as_module().unwrap().is_valid()
-        } else if self.is_struct() {
-            return self.as_struct().unwrap().is_valid();
-        } else if self.is_function() {
-            return self.as_function().unwrap().is_valid();
-        } else if self.is_variable_definition() {
-            return self.as_variable_definition().unwrap().is_valid();
-        } else if self.is_trait() {
-            return self.as_trait().unwrap().is_valid();
-        } else if self.is_enum() {
-            return self.as_enum().unwrap().is_valid();
-        } else if self.is_impl() {
-            return self.as_impl().unwrap().is_valid();
-        } else {
-            return false;
-        }
-    }
-}
-impl fmt::Display for ModuleItem {
-    fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        if self.is_module() {
-            match write!(fmt, "{}", self.as_module().unwrap()) {
-                Ok(_) => (),
-                Err(e) => return Err(e),
-            }
-        } else if self.is_struct() {
-            match write!(fmt, "{}", self.as_struct().unwrap()) {
-                Ok(_) => (),
-                Err(e) => return Err(e),
-            }
-        } else if self.is_function() {
-            match write!(fmt, "{}", self.as_function().unwrap()) {
-                Ok(_) => (),
-                Err(e) => return Err(e),
-            }
-        } else if self.is_variable_definition() {
-            match write!(
-                fmt,
-                "{} {};",
-                self.as_variable_definition().unwrap().visibility,
-                self.as_variable_definition().unwrap()
-            ) {
-                Ok(_) => (),
-                Err(e) => return Err(e),
-            }
-        } else if self.is_trait() {
-            match write!(fmt, "{}", self.as_trait().unwrap()) {
-                Ok(_) => (),
-                Err(e) => return Err(e),
-            }
-        } else if self.is_enum() {
-            match write!(fmt, "{}", self.as_enum().unwrap()) {
-                Ok(_) => (),
-                Err(e) => return Err(e),
-            }
-        } else if self.is_impl() {
-            match write!(fmt, "{}", self.as_impl().unwrap()) {
-                Ok(_) => (),
-                Err(e) => return Err(e),
-            }
-        }
-        Ok(())
-    }
-}
+use super::{attribute::Attribute, enum_declaration::EnumDeclaration, function_declaration::FunctionDeclaration, impl_declaration::ImplDeclaration, struct_declaration::StructDeclaration, trait_declaration::TraitDeclaration, use_statement::UseStatement, Visibility};
 
-/// Defines a module
-#[derive(Debug, Clone)]
+#[derive(Clone, Default)]
 pub struct Module {
-    pub attrs: Vec<Attribute>,
-    /// Module Visibility
+    pub attributes: Vec<Attribute>,
     pub visibility: Visibility,
-    /// Module Name
-    pub name: String,
-    pub items: Vec<ModuleItem>,
+    pub name: Identifier,
+    pub items: Vec<ModuleItem>
 }
 impl Module {
-    pub fn new(name: String) -> Module {
-        Module {
-            attrs: vec![],
-            visibility: Visibility::Private,
+    pub fn new(name: Identifier) -> Module {
+        return Module {
+            attributes: vec![],
+            visibility: Visibility::None,
             name,
-            items: vec![],
-        }
+            items: vec![]
+        };
     }
 
     pub fn is_valid(&self) -> bool {
-        for i in 0..self.attrs.len() {
-            if !self.attrs[i].is_valid() {
+        for i in 0..self.attributes.len() {
+            if !self.attributes[i].is_valid() {
                 return false;
             }
         }
-        if self.name.is_empty() {
+
+        if !self.name.is_valid() {
             return false;
         }
+
         for i in 0..self.items.len() {
             if !self.items[i].is_valid() {
                 return false;
             }
         }
-        true
+
+        return true;
     }
 }
-impl fmt::Display for Module {
-    fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        for i in 0..self.attrs.len() {
-            match write!(fmt, "{}", self.attrs[i]) {
-                Ok(_) => (),
-                Err(e) => return Err(e),
-            }
+
+#[derive(Clone, Default, EnumAsInner)]
+pub enum ModuleItem {
+    Module(Module),
+    UseStatement(UseStatement),
+    FunctionDeclaration(FunctionDeclaration),
+    StructDeclaration(StructDeclaration),
+    ImplDeclaration(ImplDeclaration),
+    EnumDeclaration(EnumDeclaration),
+    TraitDeclaration(TraitDeclaration),
+    #[default]
+    None
+}
+impl ModuleItem {
+    pub fn is_valid(&self) -> bool {
+        if self.is_module() {
+            return self.as_module().unwrap().is_valid();
         }
-        match write!(fmt, "{} module {} {{", self.visibility, self.name) {
-            Ok(_) => (),
-            Err(e) => return Err(e),
+        else if self.is_use_statement() {
+            return self.as_use_statement().unwrap().is_valid();
         }
-        for i in 0..self.items.len() {
-            match write!(fmt, "{}", self.items[i]) {
-                Ok(_) => (),
-                Err(e) => return Err(e),
-            }
+        else if self.is_function_declaration() {
+            return self.as_function_declaration().unwrap().is_valid();
         }
-        match write!(fmt, "}}") {
-            Ok(_) => (),
-            Err(e) => return Err(e),
+        else if self.is_struct_declaration() {
+            return self.as_struct_declaration().unwrap().is_valid();
         }
-        Ok(())
+        else if self.is_impl_declaration() {
+            return self.as_impl_declaration().unwrap().is_valid();
+        }
+        else if self.is_enum_declaration() {
+            return self.as_enum_declaration().unwrap().is_valid();
+        }
+        else if self.is_trait_declaration() {
+            return self.as_trait_declaration().unwrap().is_valid();
+        }
+        else {
+            return false;
+        }
     }
 }

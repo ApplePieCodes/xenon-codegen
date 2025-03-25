@@ -1,60 +1,34 @@
-use core::fmt;
-use std::fmt::Formatter;
+use crate::identifier::Identifier;
 
-/// An attribute applied to its owner. Usually metadata for the compiler.
-#[derive(Debug, Clone, Default)]
+/// An attribute applied to it's owner
+#[derive(Clone, Default)]
 pub struct Attribute {
     /// The name of the attribute
-    pub name: String,
-    /// The value, if any
-    pub value: Option<String>,
+    pub name: Identifier,
+    /// The value of the attribute, if any
+    pub value: Option<Identifier>
 }
 impl Attribute {
-    /// Create a new valid attribute
-    pub fn new(name: &str) -> Attribute {
-        Attribute {
-            name: name.to_string(),
-            value: None,
-        }
+    /// Create a new, valid instance of Attribute
+    pub fn new(name: Identifier) -> Attribute {
+        return Attribute {
+            name,
+            value: None
+        };
     }
 
-    /// Check if the attribute is valid
+    /// Check if the instance of Attribute is valid
     pub fn is_valid(&self) -> bool {
-        // Make sure that all present fields are not empty
-        if self.name.is_empty() {
+        if !self.name.is_valid() {
             return false;
         }
-        match self.value.clone() {
-            Some(v) => {
-                if v.is_empty() {
-                    return false;
-                }
+        match self.value.as_ref() {
+            Some(i) => {
+                return i.is_valid();
             }
-            None => ()
-        }
-
-        return true;
-    }
-}
-impl std::fmt::Display for Attribute {
-    fn fmt(&self, fmt: &mut Formatter<'_>) -> fmt::Result {
-        // Print the start of the tag and the name
-        match write!(fmt, "#[{}", self.name) {
-            Ok(_) => (),
-            Err(e) => return Err(e),
-        }
-        // If there's a value, print it in parentheses
-        if self.value.is_some() {
-            match write!(fmt, "({})", self.value.as_ref().unwrap()) {
-                Ok(_) => (),
-                Err(e) => return Err(e),
+            None => {
+                return true;
             }
         }
-        // End the tag
-        match writeln!(fmt, "]") {
-            Ok(_) => (),
-            Err(e) => return Err(e),
-        }
-        Ok(())
     }
 }

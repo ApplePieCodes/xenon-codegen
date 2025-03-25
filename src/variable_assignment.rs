@@ -1,41 +1,29 @@
-use core::fmt;
+use super::{expression::Expression, identifier::Identifier};
 
-use crate::{expression::Expression, identifier::IdentifierAccess};
-
-#[derive(Debug, Clone, Default)]
+#[derive(Clone, Default)]
 pub struct VariableAssignment {
-    pub name: IdentifierAccess,
+    pub name: Identifier,
     pub operator: String,
-    pub value: Expression,
+    pub value: Expression
 }
 impl VariableAssignment {
-    pub fn new(name: IdentifierAccess, op: String, value: Expression) -> VariableAssignment {
-        VariableAssignment {
+    pub fn new(name: Identifier, operator: String, value: Expression) -> VariableAssignment {
+        return VariableAssignment {
             name,
-            operator: op,
-            value,
-        }
+            operator,
+            value
+        };
     }
 
     pub fn is_valid(&self) -> bool {
         if !self.name.is_valid() {
             return false;
         }
-        if !["=", "+=", "-=", "*=", "/="].contains(&self.operator.as_str()) {
+
+        if !["+=", "-=", "*=", "/=", "="].contains(&self.operator.as_str()) {
             return false;
         }
-        if !self.value.is_valid() {
-            return false;
-        }
-        true
-    }
-}
-impl fmt::Display for VariableAssignment {
-    fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match write!(fmt, "{} {} {}", self.name, self.operator, self.value) {
-            Ok(_) => (),
-            Err(e) => return Err(e),
-        }
-        Ok(())
+
+        return self.value.is_valid();
     }
 }

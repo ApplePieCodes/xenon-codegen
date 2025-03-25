@@ -8,3 +8,4 @@ This package functions similar to Rust's codegen crate, allowing an in-code repr
 
 - Into\<T\> for variants of enum types
 - Documentation
+- fmt::Display for All structs and enums

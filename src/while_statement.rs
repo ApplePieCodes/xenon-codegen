@@ -1,36 +1,19 @@
-use core::fmt;
+use super::{expression::Expression, statement::Statement};
 
-use crate::{expression::Expression, statement::Statement};
-
-#[derive(Debug, Clone)]
+#[derive(Clone, Default)]
 pub struct WhileStatement {
     pub condition: Expression,
-    pub body: Box<Statement>,
+    pub body: Box<Statement>
 }
 impl WhileStatement {
     pub fn new(condition: Expression, body: Statement) -> WhileStatement {
-        WhileStatement {
+        return WhileStatement {
             condition,
-            body: Box::new(body),
-        }
+            body: Box::new(body)
+        };
     }
 
     pub fn is_valid(&self) -> bool {
-        if !self.condition.is_valid() {
-            return false;
-        }
-        if !self.body.is_valid() {
-            return false;
-        }
-        true
-    }
-}
-impl fmt::Display for WhileStatement {
-    fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match write!(fmt, "while ({}) {}", self.condition, self.body) {
-            Ok(_) => (),
-            Err(e) => return Err(e),
-        }
-        Ok(())
+        return self.condition.is_valid() && self.body.is_valid();
     }
 }

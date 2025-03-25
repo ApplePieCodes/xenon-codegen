@@ -1,61 +1,49 @@
-use core::fmt;
+use super::{expression::Expression, identifier::Identifier, r#type::Type, Visibility};
 
-use crate::{Visibility, expression::Expression, r#type::Type};
-
-#[derive(Debug, Clone)]
+#[derive(Clone, Default)]
 pub struct VariableDefinition {
     pub visibility: Visibility,
-    pub name: String,
-    pub ty: Option<Type>,
-    pub value: Option<Expression>,
+    pub name: Identifier,
+    pub r#type: Option<Type>,
+    pub value: Option<Expression>
 }
 impl VariableDefinition {
-    pub fn new(name: String) -> VariableDefinition {
-        VariableDefinition {
-            visibility: Visibility::Private,
+    pub fn new(name: Identifier) -> VariableDefinition {
+        return VariableDefinition {
+            visibility: Visibility::None,
             name,
-            ty: None,
-            value: None,
-        }
+            r#type: None,
+            value: None
+        };
     }
 
     pub fn is_valid(&self) -> bool {
-        if self.name.is_empty() {
+        if !self.name.is_valid() {
             return false;
         }
-        if let Some(t) = self.ty.clone() {
-            if !t.is_valid() {
-                return false;
+
+        match self.r#type.as_ref() {
+            Some(t) => {
+                if !t.is_valid() {
+                    return false;
+                }
             }
-        }
-        if let Some(v) = self.value.clone() {
-            if !v.is_valid() {
-                return false;
+            None => {
+
             }
         }
 
-        true
-    }
-}
-impl fmt::Display for VariableDefinition {
-    fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match write!(fmt, "let {}", self.name) {
-            Ok(_) => (),
-            Err(e) => return Err(e),
-        }
-        if let Some(t) = self.ty.clone() {
-            match write!(fmt, ": {}", t) {
-                Ok(_) => (),
-                Err(e) => return Err(e),
+        match self.value.as_ref() {
+            Some(v) => {
+                if !v.is_valid() {
+                    return false;
+                }
             }
-        }
-        if let Some(v) = self.value.clone() {
-            match write!(fmt, " = {}", v) {
-                Ok(_) => (),
-                Err(e) => return Err(e),
+            None => {
+
             }
         }
 
-        Ok(())
+        return true;
     }
 }
